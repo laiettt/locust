@@ -4,7 +4,7 @@ from src.utils.client_request import Client
 
 def chat_to_vip(client: Client):
     """
-    do something
+    do something, like body encrypt
     """
     return chat_to_vips(client=client, header={}, body={})
 

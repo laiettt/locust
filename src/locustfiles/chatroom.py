@@ -26,32 +26,32 @@ class EchoTaskSet(TaskSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.clients = Client(self.client)
+        self.clients = Client()
         self.account = None
 
     def on_start(self):
-        self.account = user_queue.get()
+        self.account = user_queue.get()[0]
+        self.clients.set_client(client=self.client, account=self.account)
         """get token"""
         pass
 
     @task
-    def call_chat_to_vip(self):
-        # print(self.account, id(self.clients))
+    def call_chat_to_vip(self) -> None:
         chat_to_vip(self.clients)
 
     @task
-    def call_get_profile(self):
-        # print(self.account, id(self.clients))
+    def call_get_profile(self) -> None:
         get_profile(self.clients)
 
 
 class EchoLocust(FastHttpUser):
     tasks = [EchoTaskSet]
-    host = "https://google.com"
+    host = "https://debugtalk.com"
     wait_time = constant(1)
 
 
 if __name__ == "__main__":
     from locust import run_single_user
     run_single_user(EchoLocust)
+    # import os
     # os.system("locust -f chatroom.py")
